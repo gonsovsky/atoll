@@ -113,7 +113,7 @@ module.exports = {
 
                                                 fs.emptyDir(freeDir).then(() => {
 
-                                                    console.log('INFO: Making [*.zip] deploy items...');
+                                                    console.log(`INFO: Making [*.zip] deploy items...(${freeDir})`);
 
                                                     // Выполняем zip-ование
                                                     const zipPromises = [];
