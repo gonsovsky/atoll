@@ -4,6 +4,9 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/Source/Coobs" />
+      <excludeFolder url="file://$MODULE_DIR$/Source/Deploy" />
+      <excludeFolder url="file://$MODULE_DIR$/Source/Distributives" />
+      <excludeFolder url="file://$MODULE_DIR$/Source/Temp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
     </content>
