@@ -127,26 +127,22 @@ module.exports = {
 
                                                     Promise.all(zipPromises).then(() => {
 
-                                                        if (process.platform !== "win32") {
-
-                                                            // УСПЕШНО ЗАВЕРШИЛИСЬ (НА LINUX)
-                                                            console.log(`INFO: Successfully created all deploy items at [${freeDir}].`);
-                                                            return resolve();
-                                                        }
-
                                                         console.log('INFO: Making [*.rpm] deploy items...');
                                                         MakeRoleRpm('*', paths, requiredVersions, wixTemplates, freeDir).then(() => {
-                                                            //УСПЕШНО СОЗДАЛИ RPM на Windows / Linux
-                                                            //return resolve();
-                                                        }).then(() => {
 
-                                                                console.log('INFO: Making [*.msi] deploy items...');
-                                                                MakeRoleMsi('*', paths, requiredVersions, wixTemplates, freeDir).then(() => {
-                                                                    // УСПЕШНО ЗАВЕРШИЛИСЬ (НА WINDOWS)
+                                                            if (process.platform !== "win32") {
+
+                                                                // УСПЕШНО ЗАВЕРШИЛИСЬ (НА LINUX)
                                                                 console.log(`INFO: Successfully created all deploy items at [${freeDir}].`);
                                                                 return resolve();
+                                                            }
 
-                                                            }).catch(err => ErrorAndRejectConsole(reject, errorMessage, `: failed to make msi installers`, err));
+                                                            console.log('INFO: Making [*.msi] deploy items...');
+                                                            MakeRoleMsi('*', paths, requiredVersions, wixTemplates, freeDir).then(() => {
+                                                                // УСПЕШНО ЗАВЕРШИЛИСЬ (НА WINDOWS)
+                                                            console.log(`INFO: Successfully created all deploy items at [${freeDir}].`);
+                                                            return resolve();
+                                                            }) .catch(err => ErrorAndRejectConsole(reject, errorMessage, `: failed to make MSI installers`, err));
 
                                                         }).catch(err => ErrorAndRejectConsole(reject, errorMessage, `: failed to make RPM installers`, err));
 
