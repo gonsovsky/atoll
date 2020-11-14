@@ -1,0 +1,3 @@
+#!/bin/sh
+a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; BINDIR=$(cd "$a"; pwd)
+"$BINDIR/../../node/linux-x64/node" "$BINDIR/../../ccm/ccm.js" "$@"

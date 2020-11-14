@@ -1,0 +1,86 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.0",
+    "signature": "2c6fda492d391034680eca8739e6c29ccd964d19"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.0": {
+      "vbuild/1.0.0": {
+        "dependencies": {
+          "Coral.Tools.Toolkit.CommandLine": "1.0.0",
+          "Coral.VBuild": "1.0.0"
+        },
+        "runtime": {
+          "vbuild.dll": {}
+        }
+      },
+      "Coral.Tools.Toolkit.CommandLine/1.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/Coral.CommandLine.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.0.0"
+          }
+        }
+      },
+      "Coral.Tools.Toolkit.Json/1.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/Coral.Json.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.0.0"
+          }
+        }
+      },
+      "Coral.Tools.Toolkit.Language/1.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/Coral.Language.dll": {
+            "assemblyVersion": "1.2.0.0",
+            "fileVersion": "1.2.0.0"
+          }
+        }
+      },
+      "Coral.VBuild/1.0.0": {
+        "dependencies": {
+          "Coral.Tools.Toolkit.Json": "1.0.0",
+          "Coral.Tools.Toolkit.Language": "1.0.0"
+        },
+        "runtime": {
+          "Coral.VBuild.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "vbuild/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Coral.Tools.Toolkit.CommandLine/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0Kix1I/sOaM0xnZd9nLZJiMW4IFJk8/t+CvJEys58oco1UxOdllYDrfnypUy8TUIUtj1SIQEtVL42K4bG0seEg==",
+      "path": "coral.tools.toolkit.commandline/1.0.0",
+      "hashPath": "coral.tools.toolkit.commandline.1.0.0.nupkg.sha512"
+    },
+    "Coral.Tools.Toolkit.Json/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gI8EdQwZlAtRRpfNDWyv8FXF1puePzboIWha97ekO/ym+cVKYjXunudetRCJdDKbvYCUvEiR25g0+5ug7sXC2g==",
+      "path": "coral.tools.toolkit.json/1.0.0",
+      "hashPath": "coral.tools.toolkit.json.1.0.0.nupkg.sha512"
+    },
+    "Coral.Tools.Toolkit.Language/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FeQXEzg5Yz4XkOr5SFo/zsIz8W/arM7kDJH/affePtzmfrK/J2+RYiH7iCOuvNOSkzmohea1ai08E5kUGm1YfA==",
+      "path": "coral.tools.toolkit.language/1.0.0",
+      "hashPath": "coral.tools.toolkit.language.1.0.0.nupkg.sha512"
+    },
+    "Coral.VBuild/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

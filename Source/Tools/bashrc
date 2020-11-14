@@ -1,0 +1,25 @@
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]:\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u\$ '
+fi
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+chmod +x "$DIR/bin/linux-x64/ccm"
+chmod +x "$DIR/bin/linux-x64/vbuild"
+chmod +x "$DIR/node/linux-x64/node"
+chmod +x "$DIR/dotnet/linux-x64/dotnet"
+
+PATH="$DIR/bin/linux-x64:$PATH"
+PATH="$DIR/node/linux-x64:$PATH"
+PATH="$DIR/dotnet/linux-x64:$PATH"
+export PATH
+
+echo Welcome to Composition Terminal!
+echo "Type 'ccm --help' for usage info"
+echo "Type 'exit' to return to parent shell"

@@ -1,0 +1,3 @@
+#!/bin/sh
+a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; BINDIR=$(cd "$a"; pwd)
+"$BINDIR/../../dotnet/linux-x64/dotnet" "$BINDIR/../../vbuild/vbuild.dll" "$@"
