@@ -14,7 +14,7 @@ module.exports = {
         script = path.join(__dirname, "../" + script)
         let args = [dll, "e", script, file]
         let retcode = await helper.Spawn(dotnet, args)
-        fs.unlinkSync(file)
+        //fs.unlinkSync(file)
         if (retcode.code != 0)
             throw `Devtool call failure. cmd: ${dotnet} ${args.join(' ')}. return code ${JSON.stringify(retcode)}`;
     }
