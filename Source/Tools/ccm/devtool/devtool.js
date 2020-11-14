@@ -16,6 +16,6 @@ module.exports = {
         let retcode = await helper.Spawn(dotnet, args)
         fs.unlinkSync(file)
         if (retcode.code != 0)
-            throw `Devtool call failure. cmd: ${dotnet}. argments: ${args.join(' ')}. return code ${JSON.stringify(retcode)}`;
+            throw `Devtool call failure. cmd: ${dotnet} ${args.join(' ')}. return code ${JSON.stringify(retcode)}`;
     }
 }
