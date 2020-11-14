@@ -1,4 +1,3 @@
-const fsx = require('fs-extra');
 const fs = require('fs');
 const helper = require('../helpers');
 const path = require('path');
@@ -8,7 +7,6 @@ const { ChooseFreeFsName, Spawn } = require('../helpers');
 module.exports = {
     devtool: async function (tempDir,paths, script, arg) {
         let argJs = JSON.stringify(arg)
-        fsx.ensureDir(tempDir)
         let file = await ChooseFreeFsName(tempDir, 'devtool', '')
         fs.writeFileSync(file, argJs)
         let dotnet = paths.dotnetExeFile

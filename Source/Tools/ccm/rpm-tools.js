@@ -32,6 +32,7 @@ function MakeRoleRpm(roleName, roleVersion, paths, rpmTemplates, outDir) {
 
         // Временная папка роли.
         const roleTempDir = path.join(paths.tempDir, `${roleName}-${roleVersion}-${RandomString()}`);
+        fs.ensureDir(roleTempDir)
 
         let rpmUnit = new RpmUnit(roleName, roleVersion, roleDistributiveDir, roleTemplateDir, roleTempDir, outDir, paths)
         rpmUnit.Install()
