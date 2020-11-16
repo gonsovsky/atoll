@@ -12,7 +12,7 @@ class RpmUnit
         let roleRelease="1"
         let description= roleName + " Application";
         let vendor="OOO";
-        this.paths = pathst
+        this.paths = paths
 
         this.Opts = {
             source: distribDir,

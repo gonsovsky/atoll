@@ -30,7 +30,7 @@ function MakeRoleRpm(roleName, roleVersion, paths, rpmTemplates, outDir) {
         // Папка дистрибутива роли.
         const roleDistributiveDir = path.join(paths.distributivesDir, roleName);
 
-        fs.ensureDirSync(roleTempDir)
+        fs.ensureDirSync(paths.tempDir)
 
         let rpmUnit = new RpmUnit(roleName, roleVersion, roleDistributiveDir, roleTemplateDir, outDir, paths)
         rpmUnit.Install()

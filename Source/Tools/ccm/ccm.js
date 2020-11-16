@@ -37,6 +37,31 @@ winston.add(winston.transports.File, { filename: path.join(paths.rootDir, 'log.l
 winston.info(`===== CCM LAUNCHED =====`);
 winston.info(`CCM COMMANDLINE: ${process.argv.join(' ')}`);
 
+// Глобальная опция, доступная для всех команд.
+program
+    .option('--log-to-console', 'show log messages in console', () => {
+        winston.add(winston.transports.Console);
+        winston.cli();
+    });
+
+// Все остальные команды.
+program
+    .command('*', '', {noHelp: true})
+    .action((commandName) => {
+
+        const m = `Unknown command [${commandName}] specified. Type --help for list of available commands.`;
+        winston.error(m);
+        console.log(m);
+        exit(-1);
+
+    });
+
+program.on('--help', () => {
+    process.stdout.write('\n  Example scenario 1:\n\n    ccm default-config\n    ccm default-versions\n\n    *** Edit config.ini and versions.ini ***\n\n    ccm make\n');
+    process.stdout.write('\n  Example scenario 2:\n\n    *** Copy existing config.ini and versions.ini ***\n\n    ccm upgrade-config\n    ccm upgrade-versions\n\n    *** Edit config.ini and versions.ini ***\n\n    ccm make\n');
+
+});
+
 // Команда восстановления кубышек.
 program
     .command('restore [coobName] [coobVersion]')
@@ -45,22 +70,18 @@ program
     .action((coobName, coobVersion, cmd) => {
 
         RestoreCoobsCommand(paths, coobName, coobVersion, cmd.overwrite)
-            .then(() => { exit(0); })
-            .catch(err => { exit(-1); });
-
+            .then(() => {
+                exit(0);
+            })
+            .catch(err => {
+                exit(-1);
+            });
     });
 
 let coobModule = /** @type {CoobModule} */ getCoobModule() ;
 
+//Команды зависимые от наличия /Coobs
 if (coobModule){
-
-    // Глобальная опция, доступная для всех команд.
-    program
-        .option('--log-to-console', 'show log messages in console', () => {
-            winston.add(winston.transports.Console);
-            winston.cli();
-        });
-
 
     // Команда создания файла переменных со значениями по-умолчанию.
     program
@@ -225,23 +246,6 @@ if (coobModule){
 
         });
 
-    // Все остальные команды.
-    program
-        .command('*', '', {noHelp: true})
-        .action((commandName) => {
-
-            const m = `Unknown command [${commandName}] specified. Type --help for list of available commands.`;
-            winston.error(m);
-            console.log(m);
-            exit(-1);
-
-        });
-
-    program.on('--help', () => {
-        process.stdout.write('\n  Example scenario 1:\n\n    ccm default-config\n    ccm default-versions\n\n    *** Edit config.ini and versions.ini ***\n\n    ccm make\n');
-        process.stdout.write('\n  Example scenario 2:\n\n    *** Copy existing config.ini and versions.ini ***\n\n    ccm upgrade-config\n    ccm upgrade-versions\n\n    *** Edit config.ini and versions.ini ***\n\n    ccm make\n');
-
-    });
 }
 
 program.parse(process.argv);

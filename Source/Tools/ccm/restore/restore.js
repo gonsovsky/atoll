@@ -38,7 +38,7 @@ class RestoreUnit {
         console.log(json)
     }
 
-    async restoreCoob(coobName, coobVersion) {
+    restoreCoob(coobName, coobVersion) {
         return new Promise((resolve, reject) => {
             var url = this.coobUrl(coobName, coobVersion)
             var filename = this.coobDest(coobName, coobVersion)
@@ -46,15 +46,18 @@ class RestoreUnit {
             console.log(`Downloading ${url}...`)
             fsx.ensureDirSync(folder)
             fsx.emptyDirSync(folder)
-            request.head(url, (err, res, body) => {
-                request(url).pipe(fs.createWriteStream(filename)).on('close',
-                    async () => {
-                        await this.devtool.unzip(filename, this.coobDestFolder(coobName))
-                        fs.unlinkSync(filename)
-                        resolve();
-                    }
-                );
-            })
+            request(url).pipe(fs.createWriteStream(filename)).on('close',
+                () => {
+                    this.devtool.unzip(filename, this.coobDestFolder(coobName))
+                        .then(() => {
+                            fs.unlinkSync(filename)
+                            resolve();
+                        })
+                        .catch(err => {
+                            throw `Failed to restore coob ${coobName}: ${err}`;
+                        });
+                }
+            );
         });
     }
 
