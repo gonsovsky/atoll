@@ -3,25 +3,16 @@
 
 const winston = require('winston');
 const program = require('commander');
-const path = require('path');
 
+const path = require('path');
 const { Paths } = require('./paths');
 
 const { CreateDefaultConfigCommand, CheckConfigCommand, UpgradeConfigCommand } = require('./config-tools');
 const { CreateDefaultVersionsCommand, CreateMonoVersionsCommand, CheckVersionsCommand, UpgradeVersionsCommand } = require('./version-tools');
 const { CreateDefaultMsiConfigCommand } = require('./msi-tools');
 const { MakeCommand } = require('./make-tools');
-
-/**
- * Отделяемый модуль, идущий в составе кубышки.
- * @typedef {Object} CoobModule
- * @prop {(targetOs: string) => string} GetVariablesDefinitionFile - фукнция получения файла переменных для целевой ОС.
- * @prop {Object.<string, string>} RequiredVersions - словарь имя-описание требуемых версий.
- * @prop {Object.<string, string>} WixTemplates - словарь имя-путь для шаблонов Wix. 
- * @prop {Object.<string, string>} ZipItems - словарь [имя папки элемента развертывания] - [имя финального zip-файла]. 
- * @prop {(flavor:string, targetOs: string, versions: Object.<string, string>, varsFile: string, distributivesDir: string, paths: Paths) => Promise} MakeDistributives - функция, выполняющая создание дистрибутивов. 
- */
-
+const { RestoreCoobsCommand } = require('./restore-tools');
+const {getCoobModule} = require('./coobModule');
 
 // Функция, вызываемая при любом выходе из приложения.
 function exit(code) {
@@ -46,26 +37,22 @@ winston.add(winston.transports.File, { filename: path.join(paths.rootDir, 'log.l
 winston.info(`===== CCM LAUNCHED =====`);
 winston.info(`CCM COMMANDLINE: ${process.argv.join(' ')}`);
 
-/** Отделяемый модуль из кубышки.  */
-let coobModule = /** @type {CoobModule} */ (null);
+// Команда восстановления кубышек.
+program
+    .command('restore [coobName] [coobVersion]')
+    .description("restore Coobs from the repository for further deployment [coobName] [coobVersion]")
+    .option('-o, --overwrite', "overwrite [coobs] if exists", true)
+    .action((coobName, coobVersion, cmd) => {
 
-try {
+        RestoreCoobsCommand(paths, coobName, coobVersion, cmd.overwrite)
+            .then(() => { exit(0); })
+            .catch(err => { exit(-1); });
 
-    coobModule = require(paths.coobModuleFile);
+    });
 
-} catch (err) {
+let coobModule = /** @type {CoobModule} */ getCoobModule() ;
 
-    winston.error(err);
-}
-
-if (!coobModule) {
-
-    const errorMessage = `ERROR: Failed to load required module from [${paths.coobModuleFile}]`;
-    console.log(errorMessage);
-    winston.error(errorMessage);
-    exit(0);
-
-} else {
+if (coobModule){
 
     // Глобальная опция, доступная для всех команд.
     program
@@ -73,6 +60,7 @@ if (!coobModule) {
             winston.add(winston.transports.Console);
             winston.cli();
         });
+
 
     // Команда создания файла переменных со значениями по-умолчанию.
     program
@@ -86,8 +74,12 @@ if (!coobModule) {
                 targetOs = 'win';
 
             CreateDefaultConfigCommand(paths.configIniFile, coobModule.GetVariablesDefinitionFile(targetOs), cmd.overwrite, cmd.advanced)
-                .then(() => { exit(0); })
-                .catch(err => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch(err => {
+                    exit(-1);
+                });
 
         });
 
@@ -102,8 +94,12 @@ if (!coobModule) {
                 targetOs = 'win';
 
             CheckConfigCommand(paths.configIniFile, coobModule.GetVariablesDefinitionFile(targetOs), paths, cmd.advanced)
-                .then(() => { exit(0); })
-                .catch(err => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch(err => {
+                    exit(-1);
+                });
 
         });
 
@@ -119,8 +115,12 @@ if (!coobModule) {
                 targetOs = 'win';
 
             UpgradeConfigCommand(paths.configIniFile, coobModule.GetVariablesDefinitionFile(targetOs), cmd.overwrite, cmd.advanced)
-                .then(() => { exit(0); })
-                .catch(err => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch(err => {
+                    exit(-1);
+                });
 
         });
 
@@ -132,23 +132,31 @@ if (!coobModule) {
         .action(cmd => {
 
             CreateDefaultVersionsCommand(paths.versionsIniFile, coobModule.RequiredVersions, cmd.overwrite)
-                .then(() => { exit(0); })
-                .catch(err => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch(err => {
+                    exit(-1);
+                });
 
         });
 
-     // Команда создания файла версий с единым значением версии для всех артефактов.
-     program
+    // Команда создания файла версий с единым значением версии для всех артефактов.
+    program
         .command('mono-versions <version>')
         .description("create [versions.ini] with specified version for all items")
         .option('-o, --overwrite', "overwrite [versions.ini] if exists", false)
         .action((version, cmd) => {
 
             CreateMonoVersionsCommand(paths.versionsIniFile, coobModule.RequiredVersions, version, cmd.overwrite)
-                .then(() => { exit(0); })
-                .catch(err => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch(err => {
+                    exit(-1);
+                });
 
-     });
+        });
 
     // Команда выполнения проверок корректности файла версий.
     program
@@ -157,8 +165,12 @@ if (!coobModule) {
         .action(cmd => {
 
             CheckVersionsCommand(paths.versionsIniFile, coobModule.RequiredVersions)
-                .then(() => { exit(0); })
-                .catch(err => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch(err => {
+                    exit(-1);
+                });
 
         });
 
@@ -170,8 +182,12 @@ if (!coobModule) {
         .action(cmd => {
 
             UpgradeVersionsCommand(paths.versionsIniFile, coobModule.RequiredVersions, cmd.overwrite)
-                .then(() => { exit(0); })
-                .catch(err => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch(err => {
+                    exit(-1);
+                });
 
         });
 
@@ -182,28 +198,36 @@ if (!coobModule) {
         .action((flavor, targetOs) => {
 
             MakeCommand(flavor, targetOs, paths, coobModule.RequiredVersions, coobModule.WixTemplates, coobModule.GetVariablesDefinitionFile(targetOs), coobModule.ZipItems, coobModule.MakeDistributives)
-                .then(() => { exit(0); })
+                .then(() => {
+                    exit(0);
+                })
 
-                .catch((err) => { exit(-1); });
+                .catch((err) => {
+                    exit(-1);
+                });
 
         });
 
     // Команда извлечения переменных для создания MSI-файла.
     program
-        .command('default-msi-config <role>', '', { noHelp: true })
+        .command('default-msi-config <role>', '', {noHelp: true})
         .description('[ADVANCED] create default configs for MSI')
         .option('-o, --overwrite', 'overwrite file(s) if exist(s).', false)
         .action((roleName, cmd) => {
 
             CreateDefaultMsiConfigCommand(roleName, paths, coobModule.RequiredVersions, coobModule.WixTemplates, cmd.overwrite)
-                .then(() => { exit(0); })
-                .catch((err) => { exit(-1); });
+                .then(() => {
+                    exit(0);
+                })
+                .catch((err) => {
+                    exit(-1);
+                });
 
         });
 
     // Все остальные команды.
     program
-        .command('*', '', { noHelp: true })
+        .command('*', '', {noHelp: true})
         .action((commandName) => {
 
             const m = `Unknown command [${commandName}] specified. Type --help for list of available commands.`;
@@ -214,22 +238,19 @@ if (!coobModule) {
         });
 
     program.on('--help', () => {
-
         process.stdout.write('\n  Example scenario 1:\n\n    ccm default-config\n    ccm default-versions\n\n    *** Edit config.ini and versions.ini ***\n\n    ccm make\n');
         process.stdout.write('\n  Example scenario 2:\n\n    *** Copy existing config.ini and versions.ini ***\n\n    ccm upgrade-config\n    ccm upgrade-versions\n\n    *** Edit config.ini and versions.ini ***\n\n    ccm make\n');
 
     });
+}
 
-    program.parse(process.argv);
+program.parse(process.argv);
 
-    // Проверка, что задано имя команды.
-    if (program.args.length < 1) {
+// Проверка, что задано имя команды.
+if (program.args.length < 1) {
 
-        const m = `No command specified. Type --help for list of available commands.`
-        winston.error(m);
-        console.log(m);
-        exit(-1);
-
-    }
-
+    const m = `No command specified. Type --help for list of available commands.`
+    winston.error(m);
+    console.log(m);
+    exit(-1);
 }

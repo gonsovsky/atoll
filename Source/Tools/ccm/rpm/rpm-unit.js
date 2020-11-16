@@ -3,17 +3,16 @@ const fs = require('fs');
 const fsx = require('fs-extra');
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
-const {devtool} = require('../devtool/devtool');
+const DevTool = require('../devtool/devtool')
 
 class RpmUnit
 {
-    constructor(roleName, roleVersion, distribDir, roleTemplateDir, roleTempDir, outDir, paths) {
+    constructor(roleName, roleVersion, distribDir, roleTemplateDir, outDir, paths) {
         let arch = "x86_64";
         let roleRelease="1"
         let description= roleName + " Application";
         let vendor="OOO";
-        this.roleTempDir = roleTempDir
-        this.paths = paths
+        this.paths = pathst
 
         this.Opts = {
             source: distribDir,
@@ -57,7 +56,8 @@ class RpmUnit
 
     async Install()
     {
-        await devtool(this.roleTempDir,this.paths, "/rpm/rpm-devtool.js", this.Opts)
+        let devtool = new DevTool(this.paths)
+        await devtool.exec("../rpm/rpm-devtool.js", this.Opts)
     }
 }
 

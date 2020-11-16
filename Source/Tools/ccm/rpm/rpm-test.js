@@ -50,7 +50,7 @@ const wixTemplates=
         "acu": "C:\\Atoll\\Source\\Coobs\\Coral.Atoll\\wix\\acu"
     }
 
-const freeDir ="C:\\Atoll\\Source\\Deploy\\2020-11-04---14-48"
+const freeDir ="C:\\Atoll\\Source\\Deploy\\"
 
 MakeRoleRpm(roleName, paths, requiredVersions, wixTemplates, freeDir)
     .then(res =>

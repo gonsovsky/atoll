@@ -30,16 +30,12 @@ function MakeRoleRpm(roleName, roleVersion, paths, rpmTemplates, outDir) {
         // Папка дистрибутива роли.
         const roleDistributiveDir = path.join(paths.distributivesDir, roleName);
 
-        // Временная папка роли.
-        const roleTempDir = path.join(paths.tempDir, `${roleName}-${roleVersion}-${RandomString()}`);
-        fs.ensureDir(roleTempDir)
-            .then(() => {
+        fs.ensureDirSync(roleTempDir)
 
-                let rpmUnit = new RpmUnit(roleName, roleVersion, roleDistributiveDir, roleTemplateDir, roleTempDir, outDir, paths)
-                rpmUnit.Install()
-                    .then(() => resolve())
-                    .catch(err => ErrorAndReject(reject, errorMessage + ': failed rpm-tools.MakeRoleRpm() ', err));
-            })
+        let rpmUnit = new RpmUnit(roleName, roleVersion, roleDistributiveDir, roleTemplateDir, outDir, paths)
+        rpmUnit.Install()
+            .then(() => resolve())
+            .catch(err => ErrorAndReject(reject, errorMessage + ': failed rpm-tools.MakeRoleRpm() ', err));
     })
 }
 
