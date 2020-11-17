@@ -21,7 +21,8 @@ const paths = {
     "versionsIniFile": "C:\\Atoll\\Source\\versions.ini",
     "composedCoobDir": "C:\\Atoll\\Source\\Coobs\\Coral.Atoll",
     "coobPropsFile": "C:\\Atoll\\Source\\Coobs\\Coral.Atoll\\coob.props",
-    "coobModuleFile": "C:\\Atoll\\Source\\Coobs\\Coral.Atoll\\scripts\\composition\\index.js"
+    "coobModuleFile": "C:\\Atoll\\Source\\Coobs\\Coral.Atoll\\scripts\\composition\\index.js",
+    "devtoolFile": "C:\\Atoll\\Source\\Tools\\devtool\\Coral.DevTool.dll"
 }
 
 const requiredVersions=
@@ -50,7 +51,7 @@ const wixTemplates=
         "acu": "C:\\Atoll\\Source\\Coobs\\Coral.Atoll\\wix\\acu"
     }
 
-const freeDir ="C:\\Atoll\\Source\\Deploy\\"
+const freeDir ="C:\\Atoll\\Source\\Deploy\\test"
 
 MakeRoleRpm(roleName, paths, requiredVersions, wixTemplates, freeDir)
     .then(res =>

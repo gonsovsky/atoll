@@ -218,7 +218,15 @@ if (coobModule){
         .description("make deploy items using [config.ini]+[versions.ini]")
         .action((flavor, targetOs) => {
 
-            MakeCommand(flavor, targetOs, paths, coobModule.RequiredVersions, coobModule.WixTemplates, coobModule.GetVariablesDefinitionFile(targetOs), coobModule.ZipItems, coobModule.MakeDistributives)
+        //TODO: Coral.Atoll / scripts / Compostion / index.js путает в двух местах Lnx/linux
+        let targetOs__makeCommand = targetOs;
+        let targetOs__GetVariablesDefinitionFile = targetOs;
+        if (targetOs__makeCommand==="lnx")
+            targetOs__makeCommand="linux"
+        if (targetOs__GetVariablesDefinitionFile==="linux")
+            targetOs__GetVariablesDefinitionFile="lnx"
+
+         MakeCommand(flavor, targetOs__makeCommand, paths, coobModule.RequiredVersions, coobModule.WixTemplates, coobModule.GetVariablesDefinitionFile(targetOs__GetVariablesDefinitionFile), coobModule.ZipItems, coobModule.MakeDistributives)
                 .then(() => {
                     exit(0);
                 })
